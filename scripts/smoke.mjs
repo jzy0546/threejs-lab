@@ -47,26 +47,26 @@ try {
     "/cookie-policy/"
   ];
   for (const route of routes) {
-    await page.goto(`${baseUrl}${route}`, { waitUntil: "networkidle" });
+    await page.goto(`${baseUrl}${route}`, { waitUntil: "domcontentloaded" });
     await page.locator("h1").waitFor({ state: "visible" });
     await assertNoHorizontalOverflow(page, route);
     await assertCanvasRendered(page, route);
   }
 
-  await page.goto(`${baseUrl}/gltf-viewer/`, { waitUntil: "networkidle" });
+  await page.goto(`${baseUrl}/gltf-viewer/`, { waitUntil: "domcontentloaded" });
   await expectText(page, "#metric-meshes", /[1-9]/, "GLB viewer mesh metric");
 
-  await page.goto(`${baseUrl}/camera-fov/`, { waitUntil: "networkidle" });
+  await page.goto(`${baseUrl}/camera-fov/`, { waitUntil: "domcontentloaded" });
   await expectText(page, "#fov-code", /camera\.fov/, "FOV code");
 
-  await page.goto(`${baseUrl}/shader-starter/`, { waitUntil: "networkidle" });
+  await page.goto(`${baseUrl}/shader-starter/`, { waitUntil: "domcontentloaded" });
   await expectText(page, "#shader-code", /ShaderMaterial/, "shader code");
 
-  await page.goto(`${baseUrl}/lighting-presets/`, { waitUntil: "networkidle" });
+  await page.goto(`${baseUrl}/lighting-presets/`, { waitUntil: "domcontentloaded" });
   await expectText(page, "#lighting-code", /DirectionalLight/, "lighting code");
 
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto(`${baseUrl}/`, { waitUntil: "networkidle" });
+  await page.goto(`${baseUrl}/`, { waitUntil: "domcontentloaded" });
   await assertNoHorizontalOverflow(page, "mobile home");
 
   await browser.close();
