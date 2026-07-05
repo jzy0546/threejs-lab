@@ -1,0 +1,21 @@
+{
+  "name": "threejs-lab",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Static Three.js tools for GLB viewing, camera math, shaders, lighting presets, and examples.",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "build": "vite build && node scripts/postbuild.mjs",
+    "preview": "vite preview --host 127.0.0.1",
+    "check": "node scripts/check.mjs",
+    "smoke": "node scripts/smoke.mjs"
+  },
+  "dependencies": {
+    "three": "^0.185.0",
+    "vite": "^7.0.0"
+  },
+  "devDependencies": {
+    "playwright": "^1.53.0"
+  }
+}

@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Three.js ShaderMaterial Starter Generator</title>
+    <meta name="description" content="Generate a minimal Three.js ShaderMaterial starter with animated wave, radial, or grid fragment shaders and a live browser preview." />
+    <link rel="canonical" href="https://threejs.vavist.com/shader-starter/" />
+    <link rel="icon" href="/site-icon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/src/styles.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "Three.js ShaderMaterial Starter Generator",
+        "applicationCategory": "DeveloperApplication",
+        "operatingSystem": "Any browser",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+      }
+    </script>
+  </head>
+  <body>
+    <div class="site-shell">
+      <header class="site-header">
+        <nav class="nav" aria-label="Main navigation">
+          <a class="brand" href="/"><span class="brand-mark" aria-hidden="true"></span><span>Three.js Lab</span></a>
+          <button class="menu-button" type="button" data-menu-button aria-expanded="false" aria-label="Open navigation">Menu</button>
+          <div class="nav-links" data-menu>
+            <a href="/" data-nav-link>Home</a>
+            <a href="/gltf-viewer/" data-nav-link>GLB Viewer</a>
+            <a href="/camera-fov/" data-nav-link>Camera FOV</a>
+            <a href="/shader-starter/" data-nav-link>Shaders</a>
+            <a href="/lighting-presets/" data-nav-link>Lighting</a>
+            <a href="/examples/" data-nav-link>Examples</a>
+          </div>
+        </nav>
+      </header>
+
+      <main class="main">
+        <section class="section compact" data-reveal>
+          <p class="eyebrow">ShaderMaterial base</p>
+          <h1>Three.js ShaderMaterial Starter Generator</h1>
+          <p class="lead">Choose a small shader pattern, preview it live, and copy a minimal ShaderMaterial setup for your scene.</p>
+        </section>
+
+        <section class="tool-layout">
+          <aside class="tool-panel" data-reveal>
+            <div class="control-group">
+              <label>First color <input id="color-a" type="color" value="#2f8f83" /></label>
+            </div>
+            <div class="control-group">
+              <label>Second color <input id="color-b" type="color" value="#151b24" /></label>
+            </div>
+            <div class="control-group">
+              <label>Animation speed <input id="shader-speed" type="range" min="0" max="4" step="0.1" value="1.2" /></label>
+            </div>
+            <div class="control-group">
+              <label>Pattern
+                <select id="shader-pattern">
+                  <option value="wave">Wave bands</option>
+                  <option value="radial">Radial glow</option>
+                  <option value="grid">Grid pulse</option>
+                </select>
+              </label>
+            </div>
+            <p class="status">The preview uses a plane mesh and keeps the shader intentionally small.</p>
+          </aside>
+          <div class="tool-stage" data-reveal>
+            <canvas id="shader-canvas" class="canvas-fill"></canvas>
+          </div>
+        </section>
+
+        <section class="section compact">
+          <div class="section-head" data-reveal>
+            <h2>Copy the starter code</h2>
+            <p>Paste this into a Three.js scene that already has a renderer, scene, and camera.</p>
+          </div>
+          <div data-reveal>
+            <div class="actions"><button class="button" type="button" data-copy-target="#shader-code">Copy Code</button></div>
+            <pre id="shader-code"></pre>
+          </div>
+        </section>
+
+        <section class="section">
+          <div class="grid two">
+            <article class="card pad" data-reveal>
+              <h2>When this helps</h2>
+              <p>Use this when you want a clean first ShaderMaterial before adding uniforms, textures, derivatives, or post-processing.</p>
+            </article>
+            <article class="card pad" data-reveal>
+              <h2>FAQ</h2>
+              <p>ShaderMaterial gives you direct GLSL control. Start small, confirm the material compiles, then add one uniform at a time.</p>
+            </article>
+          </div>
+        </section>
+      </main>
+
+      <footer class="site-footer">
+        <div class="footer-inner">
+          <span>Three.js Lab. Static tools for WebGL builders.</span>
+          <div class="footer-links">
+            <a href="/about/">About</a>
+            <a href="/contact/">Contact</a>
+            <a href="/privacy-policy/">Privacy</a>
+            <a href="/terms-of-use/">Terms</a>
+            <a href="/cookie-policy/">Cookies</a>
+          </div>
+        </div>
+      </footer>
+    </div>
+    <script type="module" src="/src/shader-starter.js"></script>
+  </body>
+</html>

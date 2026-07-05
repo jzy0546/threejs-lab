@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Three.js Lighting Presets - Copy Studio Light Setups</title>
+    <meta name="description" content="Preview and copy practical Three.js lighting presets for product scenes, GLB viewers, matte models, and high-contrast WebGL scenes." />
+    <link rel="canonical" href="https://threejs.vavist.com/lighting-presets/" />
+    <link rel="icon" href="/site-icon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/src/styles.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "Three.js Lighting Presets",
+        "applicationCategory": "DeveloperApplication",
+        "operatingSystem": "Any browser",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+      }
+    </script>
+  </head>
+  <body>
+    <div class="site-shell">
+      <header class="site-header">
+        <nav class="nav" aria-label="Main navigation">
+          <a class="brand" href="/"><span class="brand-mark" aria-hidden="true"></span><span>Three.js Lab</span></a>
+          <button class="menu-button" type="button" data-menu-button aria-expanded="false" aria-label="Open navigation">Menu</button>
+          <div class="nav-links" data-menu>
+            <a href="/" data-nav-link>Home</a>
+            <a href="/gltf-viewer/" data-nav-link>GLB Viewer</a>
+            <a href="/camera-fov/" data-nav-link>Camera FOV</a>
+            <a href="/shader-starter/" data-nav-link>Shaders</a>
+            <a href="/lighting-presets/" data-nav-link>Lighting</a>
+            <a href="/examples/" data-nav-link>Examples</a>
+          </div>
+        </nav>
+      </header>
+
+      <main class="main">
+        <section class="section compact" data-reveal>
+          <p class="eyebrow">Scene lighting</p>
+          <h1>Three.js Lighting Presets</h1>
+          <p class="lead">Preview practical light setups and copy the exact HemisphereLight, DirectionalLight, tone mapping, and exposure code.</p>
+        </section>
+
+        <section class="tool-layout">
+          <aside class="tool-panel" data-reveal>
+            <div class="control-group">
+              <label>Preset
+                <select id="lighting-preset">
+                  <option value="studio">Studio product</option>
+                  <option value="softbox">Softbox neutral</option>
+                  <option value="dusk">Dusk contrast</option>
+                  <option value="clay">Matte clay</option>
+                </select>
+              </label>
+            </div>
+            <div class="control-group">
+              <label>Exposure <input id="lighting-exposure" type="range" min="0.4" max="1.8" step="0.05" value="1" /></label>
+              <small>Maps to renderer.toneMappingExposure.</small>
+            </div>
+            <p class="status">These presets are intentionally simple so they work in small GLB viewers and product scenes.</p>
+          </aside>
+          <div class="tool-stage" data-reveal>
+            <canvas id="lighting-canvas" class="canvas-fill"></canvas>
+          </div>
+        </section>
+
+        <section class="section compact">
+          <div class="section-head" data-reveal>
+            <h2>Copy the lighting setup</h2>
+            <p>Use this as a starting point, then tune intensities after your real material and environment map are in place.</p>
+          </div>
+          <div data-reveal>
+            <div class="actions"><button class="button" type="button" data-copy-target="#lighting-code">Copy Code</button></div>
+            <pre id="lighting-code"></pre>
+          </div>
+        </section>
+
+        <section class="section">
+          <div class="grid two">
+            <article class="card pad" data-reveal>
+              <h2>What makes a model look better?</h2>
+              <p>Most dull Three.js previews need color management, tone mapping, and balanced key, fill, and rim lights before they need complex post-processing.</p>
+            </article>
+            <article class="card pad" data-reveal>
+              <h2>FAQ</h2>
+              <p>DirectionalLight works well for simple static viewers. For physically accurate product shots, add an environment map and tune material roughness.</p>
+            </article>
+          </div>
+        </section>
+      </main>
+
+      <footer class="site-footer">
+        <div class="footer-inner">
+          <span>Three.js Lab. Static tools for WebGL builders.</span>
+          <div class="footer-links">
+            <a href="/about/">About</a>
+            <a href="/contact/">Contact</a>
+            <a href="/privacy-policy/">Privacy</a>
+            <a href="/terms-of-use/">Terms</a>
+            <a href="/cookie-policy/">Cookies</a>
+          </div>
+        </div>
+      </footer>
+    </div>
+    <script type="module" src="/src/lighting-presets.js"></script>
+  </body>
+</html>

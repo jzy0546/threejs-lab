@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Three.js Particles Example with BufferGeometry and PointsMaterial</title>
+    <meta name="description" content="Build a Three.js particles scene with BufferGeometry, PointsMaterial, animation notes, performance tips, and links to working examples." />
+    <link rel="canonical" href="https://threejs.vavist.com/three-js-particles/" />
+    <link rel="icon" href="/site-icon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/src/styles.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "TechArticle",
+        "headline": "Three.js Particles Example with BufferGeometry and PointsMaterial",
+        "description": "A practical guide to building Three.js particle scenes with BufferGeometry, PointsMaterial, and small animation loops.",
+        "url": "https://threejs.vavist.com/three-js-particles/",
+        "dateModified": "2026-07-05"
+      }
+    </script>
+  </head>
+  <body>
+    <div class="site-shell">
+      <header class="site-header">
+        <nav class="nav" aria-label="Main navigation">
+          <a class="brand" href="/"><span class="brand-mark" aria-hidden="true"></span><span>Three.js Lab</span></a>
+          <button class="menu-button" type="button" data-menu-button aria-expanded="false" aria-label="Open navigation">Menu</button>
+          <div class="nav-links" data-menu>
+            <a href="/" data-nav-link>Home</a>
+            <a href="/gltf-viewer/" data-nav-link>GLB Viewer</a>
+            <a href="/camera-fov/" data-nav-link>Camera FOV</a>
+            <a href="/shader-starter/" data-nav-link>Shaders</a>
+            <a href="/lighting-presets/" data-nav-link>Lighting</a>
+            <a href="/examples/" data-nav-link>Examples</a>
+          </div>
+        </nav>
+      </header>
+
+      <main class="main">
+        <article class="prose article" data-reveal>
+          <p class="eyebrow">Particles guide</p>
+          <h1>Three.js Particles with BufferGeometry</h1>
+          <p class="lead">Use one BufferGeometry and one PointsMaterial when you want a star field, data cloud, dust layer, or abstract background without creating hundreds of meshes.</p>
+
+          <div class="article-callout">
+            <strong>Good first target:</strong>
+            <span>2,000 to 8,000 points, one material, one draw call, and a slow rotation on the Points object.</span>
+          </div>
+
+          <h2>Why particles work well in static pages</h2>
+          <p>A particle scene can make a developer page feel alive while staying cheap to render. The trick is to keep particle data in a typed array, attach it to BufferGeometry, and animate the parent object before trying custom shaders.</p>
+          <p>That pattern is also search-friendly. People often search for "three js particles example", "three js pointsmaterial", and "three js buffergeometry particles" because they need a small starting point they can paste into a scene.</p>
+
+          <h2>Minimal particle sphere</h2>
+          <pre id="particle-code">const count = 4000;
+const positions = new Float32Array(count * 3);
+
+for (let i = 0; i &lt; count; i += 1) {
+  const radius = 1.4 + Math.random() * 0.25;
+  const theta = Math.random() * Math.PI * 2;
+  const phi = Math.acos(2 * Math.random() - 1);
+  const index = i * 3;
+
+  positions[index] = radius * Math.sin(phi) * Math.cos(theta);
+  positions[index + 1] = radius * Math.sin(phi) * Math.sin(theta);
+  positions[index + 2] = radius * Math.cos(phi);
+}
+
+const geometry = new THREE.BufferGeometry();
+geometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+
+const material = new THREE.PointsMaterial({
+  color: 0x6be2d0,
+  size: 0.025,
+  sizeAttenuation: true
+});
+
+const particles = new THREE.Points(geometry, material);
+scene.add(particles);
+
+function animate() {
+  particles.rotation.y += 0.0025;
+  renderer.render(scene, camera);
+}</pre>
+          <div class="actions">
+            <button class="button" type="button" data-copy-target="#particle-code">Copy Code</button>
+            <a class="button" href="/examples/">Open Live Examples</a>
+          </div>
+
+          <h2>Useful variations</h2>
+          <div class="grid two article-grid">
+            <section class="card pad">
+              <h3>Star field</h3>
+              <p>Spread points through a cube or sphere, keep the camera near the center, and move the point cloud slowly on z. Use small point size and low opacity.</p>
+            </section>
+            <section class="card pad">
+              <h3>Data cloud</h3>
+              <p>Map data values into x, y, z positions. Store color as a second buffer attribute when each point needs its own color.</p>
+            </section>
+            <section class="card pad">
+              <h3>Hero background</h3>
+              <p>Use fewer points, larger spacing, and calmer motion. A static site can look polished without forcing the GPU to work hard.</p>
+            </section>
+            <section class="card pad">
+              <h3>Shader particles</h3>
+              <p>Move from PointsMaterial to ShaderMaterial when size, color, or position needs time-based logic per point.</p>
+            </section>
+          </div>
+
+          <h2>Performance checklist</h2>
+          <ul>
+            <li>Reuse one BufferGeometry instead of creating one mesh per dot.</li>
+            <li>Change the parent rotation before editing thousands of positions every frame.</li>
+            <li>Dispose old geometries and materials when replacing a particle scene.</li>
+            <li>Test on a phone before raising the particle count.</li>
+          </ul>
+
+          <h2>FAQ</h2>
+          <h3>Should I use PointsMaterial or ShaderMaterial?</h3>
+          <p>Start with PointsMaterial. Move to ShaderMaterial when you need animated point size, color ramps, procedural noise, or custom alpha behavior.</p>
+          <h3>How many particles can Three.js handle?</h3>
+          <p>It depends on device, point size, overdraw, and shader cost. A conservative static-page demo should stay under 10,000 points until measured.</p>
+          <h3>Can particles help SEO?</h3>
+          <p>The canvas itself is not the SEO content. The page still needs readable text, headings, code, FAQ, and internal links around the demo.</p>
+
+          <h2>Related Three.js Lab pages</h2>
+          <div class="guide-list">
+            <a href="/examples/">Three.js Examples with Code</a>
+            <a href="/three-js-shader-material-example/">ShaderMaterial Example</a>
+            <a href="/camera-fov/">Camera FOV Calculator</a>
+          </div>
+
+          <h2>Sources</h2>
+          <ul class="source-list">
+            <li><a href="https://threejs.org/docs/#api/en/core/BufferGeometry" rel="nofollow">Three.js BufferGeometry documentation</a></li>
+            <li><a href="https://threejs.org/docs/#api/en/materials/PointsMaterial" rel="nofollow">Three.js PointsMaterial documentation</a></li>
+            <li><a href="https://github.com/mrdoob/three.js" rel="nofollow">Three.js GitHub repository</a></li>
+          </ul>
+        </article>
+      </main>
+
+      <footer class="site-footer">
+        <div class="footer-inner">
+          <span>Three.js Lab. Static tools for WebGL builders.</span>
+          <div class="footer-links">
+            <a href="/about/">About</a>
+            <a href="/contact/">Contact</a>
+            <a href="/privacy-policy/">Privacy</a>
+            <a href="/terms-of-use/">Terms</a>
+            <a href="/cookie-policy/">Cookies</a>
+          </div>
+        </div>
+      </footer>
+    </div>
+    <script type="module" src="/src/static-page.js"></script>
+  </body>
+</html>

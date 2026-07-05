@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Three.js Rotating Object Example Around Center and Pivot</title>
+    <meta name="description" content="Learn how to rotate a Three.js object around its own center, around a pivot group, and inside an animation loop with practical code examples." />
+    <link rel="canonical" href="https://threejs.vavist.com/three-js-rotating-object/" />
+    <link rel="icon" href="/site-icon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/src/styles.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "TechArticle",
+        "headline": "Three.js Rotating Object Example Around Center and Pivot",
+        "description": "A practical guide to rotating objects in Three.js around their own axis or around a parent pivot.",
+        "url": "https://threejs.vavist.com/three-js-rotating-object/",
+        "dateModified": "2026-07-05"
+      }
+    </script>
+  </head>
+  <body>
+    <div class="site-shell">
+      <header class="site-header">
+        <nav class="nav" aria-label="Main navigation">
+          <a class="brand" href="/"><span class="brand-mark" aria-hidden="true"></span><span>Three.js Lab</span></a>
+          <button class="menu-button" type="button" data-menu-button aria-expanded="false" aria-label="Open navigation">Menu</button>
+          <div class="nav-links" data-menu>
+            <a href="/" data-nav-link>Home</a>
+            <a href="/gltf-viewer/" data-nav-link>GLB Viewer</a>
+            <a href="/camera-fov/" data-nav-link>Camera FOV</a>
+            <a href="/shader-starter/" data-nav-link>Shaders</a>
+            <a href="/lighting-presets/" data-nav-link>Lighting</a>
+            <a href="/examples/" data-nav-link>Examples</a>
+          </div>
+        </nav>
+      </header>
+
+      <main class="main">
+        <article class="prose article" data-reveal>
+          <p class="eyebrow">Rotation guide</p>
+          <h1>Three.js Rotating Object Example</h1>
+          <p class="lead">Most rotation bugs come from mixing up local axis rotation, world axis rotation, and pivot rotation. Start by deciding which one you need.</p>
+
+          <div class="article-callout">
+            <strong>Fast rule:</strong>
+            <span>Rotate the mesh for spin. Rotate a parent Group for orbit. Use lookAt when the object needs to face something.</span>
+          </div>
+
+          <h2>Rotate around the object's own center</h2>
+          <p>This is the common product viewer and loading animation pattern. The mesh rotates around its local axes.</p>
+          <pre id="rotate-center-code">const mesh = new THREE.Mesh(geometry, material);
+scene.add(mesh);
+
+function animate() {
+  mesh.rotation.y += 0.01;
+  mesh.rotation.x += 0.003;
+  renderer.render(scene, camera);
+}</pre>
+          <div class="actions">
+            <button class="button" type="button" data-copy-target="#rotate-center-code">Copy Code</button>
+            <a class="button" href="/examples/">See Torus Knot Example</a>
+          </div>
+
+          <h2>Rotate around a pivot point</h2>
+          <p>Use a Group when the object should orbit around another point. The mesh is offset inside the group, then the group rotates.</p>
+          <pre id="pivot-code">const pivot = new THREE.Group();
+scene.add(pivot);
+
+const satellite = new THREE.Mesh(geometry, material);
+satellite.position.x = 2.2;
+pivot.add(satellite);
+
+function animate() {
+  pivot.rotation.y += 0.008;
+  renderer.render(scene, camera);
+}</pre>
+          <div class="actions">
+            <button class="button" type="button" data-copy-target="#pivot-code">Copy Code</button>
+          </div>
+
+          <h2>Which rotation should you use?</h2>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Goal</th>
+                  <th>Object to rotate</th>
+                  <th>Common search phrase</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Spin a product model</td>
+                  <td>Mesh or loaded scene</td>
+                  <td>three js rotate object</td>
+                </tr>
+                <tr>
+                  <td>Orbit one object around another</td>
+                  <td>Parent Group</td>
+                  <td>three js rotate object around point</td>
+                </tr>
+                <tr>
+                  <td>Keep an object facing the camera</td>
+                  <td>Object with lookAt</td>
+                  <td>three js object face camera</td>
+                </tr>
+                <tr>
+                  <td>Rotate imported GLB</td>
+                  <td>Loaded gltf.scene</td>
+                  <td>three js rotate gltf object</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h2>Notes from the TorusKnot demo</h2>
+          <p>The examples page uses TorusKnotGeometry because its curved surface makes lighting and normal issues visible. If the knot appears at the edge of the canvas, the camera is usually off-center or missing a lookAt call.</p>
+          <pre id="lookat-code">camera.position.set(0, 0.35, 5.2);
+camera.lookAt(0, 0, 0);
+mesh.rotation.y += 0.01;</pre>
+          <div class="actions">
+            <button class="button" type="button" data-copy-target="#lookat-code">Copy Code</button>
+          </div>
+
+          <h2>FAQ</h2>
+          <h3>Why does my object rotate around a strange point?</h3>
+          <p>The geometry origin or parent transform is probably not where you expect. Put the mesh in a Group, offset the mesh, and rotate the group when you need a controlled pivot.</p>
+          <h3>How do I rotate a loaded GLB?</h3>
+          <p>Rotate the loaded scene returned by GLTFLoader, or wrap it in a Group and rotate the group. Use the GLB viewer first if you need to inspect scale and bounds.</p>
+          <h3>Should rotation use degrees or radians?</h3>
+          <p>Three.js rotations use radians. Use THREE.MathUtils.degToRad when a design note or UI control gives degrees.</p>
+
+          <h2>Related Three.js Lab pages</h2>
+          <div class="guide-list">
+            <a href="/examples/">Live Rotation Examples</a>
+            <a href="/three-js-gltfloader-example/">GLTFLoader Example</a>
+            <a href="/three-js-fit-camera-to-object/">Fit Camera to Object</a>
+          </div>
+
+          <h2>Sources</h2>
+          <ul class="source-list">
+            <li><a href="https://threejs.org/docs/#api/en/core/Object3D" rel="nofollow">Three.js Object3D documentation</a></li>
+            <li><a href="https://threejs.org/docs/#api/en/core/Group" rel="nofollow">Three.js Group documentation</a></li>
+            <li><a href="https://threejs.org/docs/#api/en/geometries/TorusKnotGeometry" rel="nofollow">Three.js TorusKnotGeometry documentation</a></li>
+          </ul>
+        </article>
+      </main>
+
+      <footer class="site-footer">
+        <div class="footer-inner">
+          <span>Three.js Lab. Static tools for WebGL builders.</span>
+          <div class="footer-links">
+            <a href="/about/">About</a>
+            <a href="/contact/">Contact</a>
+            <a href="/privacy-policy/">Privacy</a>
+            <a href="/terms-of-use/">Terms</a>
+            <a href="/cookie-policy/">Cookies</a>
+          </div>
+        </div>
+      </footer>
+    </div>
+    <script type="module" src="/src/static-page.js"></script>
+  </body>
+</html>

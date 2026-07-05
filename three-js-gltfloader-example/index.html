@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Three.js GLTFLoader Example for GLB Models and Animations</title>
+    <meta name="description" content="Load GLB and GLTF models in Three.js with GLTFLoader, inspect scene bounds, fit the camera, play animations, and avoid common loading issues." />
+    <link rel="canonical" href="https://threejs.vavist.com/three-js-gltfloader-example/" />
+    <link rel="icon" href="/site-icon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/src/styles.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "TechArticle",
+        "headline": "Three.js GLTFLoader Example for GLB Models and Animations",
+        "description": "A practical Three.js GLTFLoader starter for GLB files, bounds inspection, camera fitting, and animation playback.",
+        "url": "https://threejs.vavist.com/three-js-gltfloader-example/",
+        "dateModified": "2026-07-05"
+      }
+    </script>
+  </head>
+  <body>
+    <div class="site-shell">
+      <header class="site-header">
+        <nav class="nav" aria-label="Main navigation">
+          <a class="brand" href="/"><span class="brand-mark" aria-hidden="true"></span><span>Three.js Lab</span></a>
+          <button class="menu-button" type="button" data-menu-button aria-expanded="false" aria-label="Open navigation">Menu</button>
+          <div class="nav-links" data-menu>
+            <a href="/" data-nav-link>Home</a>
+            <a href="/gltf-viewer/" data-nav-link>GLB Viewer</a>
+            <a href="/camera-fov/" data-nav-link>Camera FOV</a>
+            <a href="/shader-starter/" data-nav-link>Shaders</a>
+            <a href="/lighting-presets/" data-nav-link>Lighting</a>
+            <a href="/examples/" data-nav-link>Examples</a>
+          </div>
+        </nav>
+      </header>
+
+      <main class="main">
+        <article class="prose article" data-reveal>
+          <p class="eyebrow">Model loading guide</p>
+          <h1>Three.js GLTFLoader Example</h1>
+          <p class="lead">GLB and GLTF are common formats for web 3D. A clean loader setup should load the asset, add it to the scene, fit the camera, and handle animations when they exist.</p>
+
+          <div class="article-callout">
+            <strong>Before coding:</strong>
+            <span>Drop the model into the GLB Viewer to check scale, bounds, vertex count, and whether the model contains animations.</span>
+          </div>
+
+          <h2>Basic GLTFLoader code</h2>
+          <pre id="gltf-code">import * as THREE from "three";
+import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+
+const loader = new GLTFLoader();
+let mixer = null;
+
+loader.load(
+  "/models/product.glb",
+  (gltf) => {
+    const model = gltf.scene;
+    scene.add(model);
+
+    const box = new THREE.Box3().setFromObject(model);
+    const center = box.getCenter(new THREE.Vector3());
+    camera.lookAt(center);
+
+    if (gltf.animations.length) {
+      mixer = new THREE.AnimationMixer(model);
+      mixer.clipAction(gltf.animations[0]).play();
+    }
+  },
+  (event) => {
+    const loaded = event.loaded / event.total;
+    console.log(`Loaded ${Math.round(loaded * 100)}%`);
+  },
+  (error) => {
+    console.error("GLTFLoader failed", error);
+  }
+);
+
+const clock = new THREE.Clock();
+
+function animate() {
+  const delta = clock.getDelta();
+  if (mixer) mixer.update(delta);
+  renderer.render(scene, camera);
+}</pre>
+          <div class="actions">
+            <button class="button" type="button" data-copy-target="#gltf-code">Copy Code</button>
+            <a class="button" href="/gltf-viewer/">Open GLB Viewer</a>
+          </div>
+
+          <h2>GLB loading checklist</h2>
+          <div class="grid two article-grid">
+            <section class="card pad">
+              <h3>Use the addon import</h3>
+              <p>Import GLTFLoader from three/addons/loaders/GLTFLoader.js when using modern Three.js packages.</p>
+            </section>
+            <section class="card pad">
+              <h3>Fit the camera after load</h3>
+              <p>The model bounds are only known after the loader callback receives gltf.scene.</p>
+            </section>
+            <section class="card pad">
+              <h3>Check animations</h3>
+              <p>GLB files can include clips. Use AnimationMixer only when gltf.animations contains at least one clip.</p>
+            </section>
+            <section class="card pad">
+              <h3>Light the material</h3>
+              <p>Many imported materials look flat until tone mapping, key light, fill light, and environment lighting are in place.</p>
+            </section>
+          </div>
+
+          <h2>Common GLTFLoader problems</h2>
+          <ul>
+            <li>White or black model: add lights and check color management.</li>
+            <li>Model missing: inspect network path and browser console errors.</li>
+            <li>Model too large or tiny: measure Box3 bounds and fit the camera.</li>
+            <li>Animation not playing: create AnimationMixer and update it every frame with clock delta.</li>
+          </ul>
+
+          <h2>FAQ</h2>
+          <h3>Should I use GLB or GLTF?</h3>
+          <p>GLB is a single binary file, which is convenient for uploads and static hosting. GLTF can reference separate texture and binary files.</p>
+          <h3>Can I load local files in a static site?</h3>
+          <p>Yes. Use a file input and URL.createObjectURL so the browser can load the selected file without uploading it to a server.</p>
+          <h3>Why does my GLB look different from Blender?</h3>
+          <p>Lighting, environment maps, tone mapping, color space, and material settings can differ between Blender and the browser.</p>
+
+          <h2>Related Three.js Lab pages</h2>
+          <div class="guide-list">
+            <a href="/gltf-viewer/">Local GLB Viewer</a>
+            <a href="/three-js-fit-camera-to-object/">Fit Camera to Object</a>
+            <a href="/lighting-presets/">Lighting Presets</a>
+          </div>
+
+          <h2>Sources</h2>
+          <ul class="source-list">
+            <li><a href="https://threejs.org/docs/#examples/en/loaders/GLTFLoader" rel="nofollow">Three.js GLTFLoader documentation</a></li>
+            <li><a href="https://threejs.org/docs/#api/en/animation/AnimationMixer" rel="nofollow">Three.js AnimationMixer documentation</a></li>
+            <li><a href="https://threejs.org/manual/#en/load-gltf" rel="nofollow">Three.js manual: loading GLTF files</a></li>
+          </ul>
+        </article>
+      </main>
+
+      <footer class="site-footer">
+        <div class="footer-inner">
+          <span>Three.js Lab. Static tools for WebGL builders.</span>
+          <div class="footer-links">
+            <a href="/about/">About</a>
+            <a href="/contact/">Contact</a>
+            <a href="/privacy-policy/">Privacy</a>
+            <a href="/terms-of-use/">Terms</a>
+            <a href="/cookie-policy/">Cookies</a>
+          </div>
+        </div>
+      </footer>
+    </div>
+    <script type="module" src="/src/static-page.js"></script>
+  </body>
+</html>
