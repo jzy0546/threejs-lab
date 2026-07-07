@@ -54,6 +54,10 @@ for (const file of htmlFiles) {
   let html = await readFile(file, "utf8");
   html = html.replaceAll("https://threejs.vavist.com", siteUrl);
   html = moveStylesheetsBeforeScripts(html);
+  html = ensureRobotsMeta(html);
+  html = ensureOpenGraphSiteName(html);
+  html = ensureTwitterMeta(html);
+  html = ensureJsonLd(html);
   html = injectBeforeHead(html, buildAnalyticsSnippet(gaId));
   html = injectBeforeHead(html, buildAdsenseSnippet(adsenseClient));
   await writeFile(file, html, "utf8");
@@ -89,6 +93,58 @@ function moveStylesheetsBeforeScripts(html) {
     return next.replace(firstModuleScript[0], `${styleLinks.join("")}${firstModuleScript[0]}`);
   }
   return next.replace("</head>", `${styleLinks.join("")}\n  </head>`);
+}
+
+function ensureRobotsMeta(html) {
+  if (/<meta\s+name="robots"/i.test(html)) return html;
+  return html.replace("</head>", `    <meta name="robots" content="index,follow" />\n  </head>`);
+}
+
+function ensureOpenGraphSiteName(html) {
+  if (/<meta\s+property="og:site_name"/i.test(html)) return html;
+  return html.replace("</head>", `    <meta property="og:site_name" content="Three.js Lab" />\n  </head>`);
+}
+
+function ensureTwitterMeta(html) {
+  if (/<meta\s+name="twitter:card"/i.test(html)) return html;
+  const title = readTag(html, /<title>([^<]+)<\/title>/i);
+  const description = readTag(html, /<meta\s+name="description"\s+content="([^"]+)"/i);
+  const twitter = `    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="${escapeHtml(title)}" />
+    <meta name="twitter:description" content="${escapeHtml(description)}" />`;
+  return html.replace("</head>", `${twitter}\n  </head>`);
+}
+
+function ensureJsonLd(html) {
+  if (/<script\s+type="application\/ld\+json"/i.test(html)) return html;
+  const title = readTag(html, /<title>([^<]+)<\/title>/i);
+  const description = readTag(html, /<meta\s+name="description"\s+content="([^"]+)"/i);
+  const url = readTag(html, /<link\s+rel="canonical"\s+href="([^"]+)"/i);
+  const data = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: title,
+    url,
+    description,
+    isPartOf: {
+      "@type": "WebSite",
+      name: "Three.js Lab",
+      url: `${siteUrl}/`
+    }
+  };
+  return injectBeforeHead(html, `    <script type="application/ld+json">${JSON.stringify(data)}</script>`);
+}
+
+function readTag(html, regex) {
+  return html.match(regex)?.[1]?.trim() || "";
+}
+
+function escapeHtml(value) {
+  return String(value)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;");
 }
 
 function buildAnalyticsSnippet(id) {

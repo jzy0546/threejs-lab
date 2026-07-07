@@ -11,11 +11,25 @@
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
-        "@type": "SoftwareApplication",
+        "@type": ["SoftwareApplication", "FAQPage"],
         "name": "Three.js Lighting Presets",
+        "url": "https://threejs.vavist.com/lighting-presets/",
+        "description": "Preview and copy readable Three.js lighting presets for GLB viewers, product scenes, matte models, and high-contrast WebGL layouts.",
         "applicationCategory": "DeveloperApplication",
         "operatingSystem": "Any browser",
-        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Why does a GLB look black in Three.js?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Common causes include weak lighting, missing environment reflections, color-management assumptions, or materials that need a different inspection preset." }
+          },
+          {
+            "@type": "Question",
+            "name": "Should I start with shadows or lighting?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Start with readable lighting first. Add shadows only after the model, materials, and camera framing are already understandable." }
+          }
+        ]
       }
     </script>
   </head>
@@ -86,6 +100,14 @@
             <article class="card pad" data-reveal>
               <h2>FAQ</h2>
               <p>DirectionalLight works well for simple static viewers. For physically accurate product shots, add an environment map and tune material roughness.</p>
+            </article>
+            <article class="card pad" data-reveal>
+              <h2>Preset meanings</h2>
+              <p>Use studio product for balanced previews, softbox neutral for inspection, dusk contrast for dark interfaces, and matte clay when shape matters more than material finish.</p>
+            </article>
+            <article class="card pad" data-reveal>
+              <h2>Pair lighting with model checks</h2>
+              <p>If a GLB still looks wrong, inspect it in the <a href="/gltf-viewer/">GLB Viewer</a> and read the <a href="/three-js-gltfloader-example/">GLTFLoader example</a> before changing every light value.</p>
             </article>
           </div>
         </section>

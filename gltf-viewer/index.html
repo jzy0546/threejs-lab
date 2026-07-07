@@ -13,6 +13,8 @@
         "@context": "https://schema.org",
         "@type": ["SoftwareApplication", "FAQPage"],
         "name": "Online GLB Viewer for Three.js",
+        "url": "https://threejs.vavist.com/gltf-viewer/",
+        "description": "Preview GLB and GLTF files locally in a browser-based Three.js viewer.",
         "applicationCategory": "DeveloperApplication",
         "operatingSystem": "Any browser",
         "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
@@ -86,6 +88,14 @@
               <h2>Related Three.js tools</h2>
               <p><a href="/camera-fov/">Calculate camera FOV</a> after checking model size, then use <a href="/lighting-presets/">lighting presets</a> to build a better preview scene.</p>
             </article>
+            <article class="card pad" data-reveal>
+              <h2>What to inspect first</h2>
+              <p>Start with the bounding-box size, mesh count, triangle count, and material behavior. Those numbers tell you whether the file is ready for a product viewer, a hero scene, or a heavier optimization pass.</p>
+            </article>
+            <article class="card pad" data-reveal>
+              <h2>Next step after preview</h2>
+              <p>If the object appears off-center, use <a href="/three-js-fit-camera-to-object/">the fit-camera guide</a>. If the model looks dark or flat, compare it with the <a href="/lighting-presets/">lighting presets</a> before changing the asset.</p>
+            </article>
           </div>
         </section>
 
@@ -101,6 +111,14 @@
             <article class="card pad" data-reveal>
               <h3>Why does my texture look different?</h3>
               <p>Lighting, color management, texture paths, and environment maps can change how a GLB appears between viewers.</p>
+            </article>
+            <article class="card pad" data-reveal>
+              <h3>What file size works best?</h3>
+              <p>Small diagnostic previews work best with optimized GLB files. If the model feels slow, check texture dimensions, triangle count, and whether compression belongs in your production pipeline.</p>
+            </article>
+            <article class="card pad" data-reveal>
+              <h3>Can I use this as a product viewer?</h3>
+              <p>Use it as a debugging bench first. For a production product viewer, add deliberate loading states, camera limits, environment lighting, and mobile performance checks.</p>
             </article>
           </div>
         </section>

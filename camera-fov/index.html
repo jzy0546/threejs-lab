@@ -11,11 +11,25 @@
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
-        "@type": "SoftwareApplication",
+        "@type": ["SoftwareApplication", "FAQPage"],
         "name": "Three.js Camera FOV Calculator",
+        "url": "https://threejs.vavist.com/camera-fov/",
+        "description": "Calculate perspective camera field of view and visible width from object size, distance, aspect ratio, and framing margin.",
         "applicationCategory": "DeveloperApplication",
         "operatingSystem": "Any browser",
-        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Is Three.js PerspectiveCamera fov vertical or horizontal?",
+            "acceptedAnswer": { "@type": "Answer", "text": "PerspectiveCamera.fov is vertical field of view in degrees. Horizontal field of view depends on the viewport aspect ratio." }
+          },
+          {
+            "@type": "Question",
+            "name": "When should I calculate camera FOV instead of guessing?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Calculate it when a model must stay framed across screen sizes, product pages, thumbnails, configurators, or GLB viewers." }
+          }
+        ]
       }
     </script>
   </head>
@@ -93,6 +107,14 @@
             <article class="card pad" data-reveal>
               <h2>FAQ</h2>
               <p>PerspectiveCamera.fov is vertical FOV in degrees. Horizontal FOV depends on aspect ratio, so it changes when the viewport changes.</p>
+            </article>
+            <article class="card pad" data-reveal>
+              <h2>How this maps to Box3</h2>
+              <p>For imported GLB files, compute a Box3 after the model loads, use its height as the object height, then calculate the distance or FOV before updating OrbitControls target.</p>
+            </article>
+            <article class="card pad" data-reveal>
+              <h2>Common framing mistake</h2>
+              <p>A desktop-perfect camera can crop wide objects on mobile. Compare vertical and horizontal fit, then choose the larger distance when the viewport is narrow.</p>
             </article>
           </div>
         </section>

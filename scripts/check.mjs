@@ -17,10 +17,35 @@ if (htmlFiles.length < 16) {
 for (const file of htmlFiles) {
   const rel = relative(process.cwd(), file);
   const html = await readFile(file, "utf8");
+  const title = html.match(/<title>([^<]+)<\/title>/i)?.[1] || "";
+  const description = html.match(/<meta\s+name="description"\s+content="([^"]+)"/i)?.[1] || "";
+  const h1s = [...html.matchAll(/<h1\b[^>]*>[\s\S]*?<\/h1>/gi)];
+  const canonicals = [...html.matchAll(/<link\s+rel="canonical"\s+href="https?:\/\/[^"]+"/gi)];
+
   requireMatch(html, /<title>[^<]{8,}<\/title>/i, rel, "missing title");
+  if (title.length < 30 || title.length > 70) {
+    errors.push(`${rel}: title should be 30-70 characters, found ${title.length}`);
+  }
   requireMatch(html, /<meta\s+name="description"\s+content="[^"]{40,}"/i, rel, "missing meta description");
-  requireMatch(html, /<h1\b[^>]*>[\s\S]*?<\/h1>/i, rel, "missing h1");
-  requireMatch(html, /<link\s+rel="canonical"\s+href="https?:\/\/[^"]+"/i, rel, "missing canonical link");
+  if (description.length < 80 || description.length > 170) {
+    errors.push(`${rel}: description should be 80-170 characters, found ${description.length}`);
+  }
+  if (h1s.length !== 1) errors.push(`${rel}: should have exactly one h1, found ${h1s.length}`);
+  if (canonicals.length !== 1) errors.push(`${rel}: should have exactly one canonical link, found ${canonicals.length}`);
+  requireMatch(html, /<meta\s+name="robots"\s+content="index,follow"/i, rel, "missing index,follow robots meta");
+  requireMatch(html, /<meta\s+name="twitter:card"\s+content="summary"/i, rel, "missing twitter card");
+  requireMatch(html, /<meta\s+property="og:site_name"\s+content="Three\.js Lab"/i, rel, "missing og site name");
+  const jsonBlocks = [...html.matchAll(/<script\s+type="application\/ld\+json">([\s\S]*?)<\/script>/gi)];
+  if (!jsonBlocks.length) {
+    errors.push(`${rel}: missing JSON-LD`);
+  }
+  for (const block of jsonBlocks) {
+    try {
+      JSON.parse(block[1]);
+    } catch {
+      errors.push(`${rel}: invalid JSON-LD`);
+    }
+  }
   if (/[—–]/.test(html)) errors.push(`${rel}: contains em dash or en dash`);
   if (/TODO|TBD|lorem ipsum/i.test(html)) errors.push(`${rel}: contains placeholder text`);
 }
