@@ -1,9 +1,6 @@
 name: Deploy static site to GitHub Pages
 
 on:
-  push:
-    branches:
-      - main
   workflow_dispatch:
 
 permissions:
@@ -31,11 +28,7 @@ jobs:
       - name: Build
         run: npm run build
         env:
-          SITE_URL: ${{ vars.SITE_URL }}
           CUSTOM_DOMAIN: ${{ vars.CUSTOM_DOMAIN }}
-          GA_MEASUREMENT_ID: ${{ vars.GA_MEASUREMENT_ID }}
-          ADSENSE_CLIENT: ${{ vars.ADSENSE_CLIENT }}
-          ADS_TXT_ACCOUNT: ${{ vars.ADS_TXT_ACCOUNT }}
       - name: Check static output
         run: npm run check
       - name: Upload artifact
