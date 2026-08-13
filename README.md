@@ -1,38 +1,27 @@
-# Three.js Lab
+# Three.js Lab legacy migration shell
 
-Static Three.js tools built for search traffic and quick validation.
-
-## MVP Pages
-
-- Home with a live Three.js scene
-- GLB Viewer
-- Camera FOV Calculator
-- ShaderMaterial Starter Generator
-- Lighting Preset Generator
-- Examples Gallery
-- Particles with BufferGeometry Guide
-- Rotating Object Guide
-- ShaderMaterial Example Guide
-- Fit Camera to Object Guide
-- GLTFLoader Example Guide
-- About, Contact, Privacy, Terms, Cookie Policy
+This repository no longer publishes the maintained tools or guides. It builds
+`noindex,follow` migration pages from `threejs.vavist.com` to the corresponding
+pages on `https://vavist.com`.
 
 ## Commands
 
 ```bash
-npm install
-npm run dev
+npm ci
 npm run build
 npm run check
-npm run smoke
 ```
 
-## Build Settings
+## Publishing order
 
-Optional environment variables:
+Do not deploy this shell before the main-domain migration is live.
 
-- `SITE_URL` sets canonical URLs and sitemap links. Default: `https://threejs.vavist.com`
-- `CUSTOM_DOMAIN` writes `dist/CNAME`
-- `ADS_TXT_ACCOUNT` writes `dist/ads.txt`
+1. Deploy `vavist.com`.
+2. Confirm all five `/tools/` targets and the maintained guide/policy targets return HTTP 200.
+3. Run this repository's build and check.
+4. Manually dispatch the legacy GitHub Pages workflow.
 
-The finished site is static. All Three.js tools run in the browser.
+GitHub Pages cannot return a configurable HTTP 301 here. Each shell therefore
+uses a visible link, a five-second meta refresh, JavaScript `location.replace`,
+a new-domain canonical, and `noindex,follow`. Query parameters and fragments are
+preserved by the JavaScript redirect.
